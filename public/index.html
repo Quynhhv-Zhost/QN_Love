@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Our Love Story ❤️</title>
+    <link rel="stylesheet" href="css/main.css?v=28">
+    <link rel="stylesheet" href="css/animations/hearts.css?v=28">
+    <link rel="stylesheet" href="css/animations/particles.css?v=28">
+    <link rel="stylesheet" href="css/animations/floating.css?v=28">
+    <link rel="stylesheet" href="css/animations/transitions.css?v=28">
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Floating Hearts Background -->
+    <div class="hearts-container"></div>
+    
+    <!-- Particle Effects -->
+    <div class="particles-container"></div>
+
+    <!-- Main Container -->
+    <div class="main-container">
+        <!-- Header -->
+        <header class="love-header">
+            <!-- Left Side: Photo & Caption -->
+            <div class="banner-left-side">
+                <div class="banner-photo-container">
+                    <img id="bannerPhoto" class="banner-photo" src="/uploads/banner.jpg" alt="Our Love" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22400%22 height=%22300%22%3E%3Crect fill=%22%23ff6b9d%22 width=%22400%22 height=%22300%22/%3E%3Ctext x=%2250%25%22 y=%2250%25%22 dominant-baseline=%22middle%22 text-anchor=%22middle%22 font-family=%22Arial%22 font-size=%2224%22 fill=%22white%22%3E❤️ Upload ảnh trong Admin%3C/text%3E%3C/svg%3E'">
+                </div>
+                <div class="banner-caption" id="bannerCaption">
+                    Tình yêu không phải là nhìn nhau, mà là cùng nhau nhìn về một hướng. ❤️
+                </div>
+            </div>
+            
+            <!-- Right Side: Heart Particle -->
+            <div class="banner-heart">
+                <canvas id="heartCanvas" class="heart-canvas"></canvas>
+                <div class="heart-center-text">
+                    <span class="heart-days-big" id="heartDaysBig">632</span>
+                    <span class="heart-label-big">Ngày yêu</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- Navigation -->
+        <nav class="love-nav">
+            <button class="nav-btn active" data-category="all">Tất cả</button>
+            <button class="nav-btn" data-category="couple">Ảnh đôi</button>
+            <button class="nav-btn" data-category="food">Đồ ăn</button>
+            <button class="nav-btn" data-category="travel">Du lịch</button>
+        </nav>
+
+        <!-- Gallery -->
+        <div class="gallery-container">
+            <!-- Film Strip Section - Always visible at top -->
+            <div class="film-strip-section">
+                <h2 class="section-title">🎞️ Kỷ niệm của chúng ta</h2>
+                <div class="film-strip-container" id="filmStripContainer">
+                    <div class="film-strip" id="filmStrip">
+                        <!-- Film frames will be loaded here -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Polaroid Grid Section -->
+            <div class="polaroid-section">
+                <h2 class="section-title">📷 Bộ sưu tập ảnh</h2>
+                <div class="gallery-grid" id="gallery">
+                    <!-- Photos will be loaded here -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal -->
+        <div class="modal" id="photoModal">
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <img class="modal-image" id="modalImage">
+                <div class="modal-info">
+                    <h3 id="modalTitle"></h3>
+                    <p id="modalDate"></p>
+                    <p id="modalDescription"></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/effects/hearts.js?v=28"></script>
+    <script src="js/effects/particles.js?v=28"></script>
+    <script src="js/effects/heart-particle.js?v=28"></script>
+    <script src="js/effects/gallery.js?v=28"></script>
+    <script src="js/main.js?v=28"></script>
+</body>
+</html>

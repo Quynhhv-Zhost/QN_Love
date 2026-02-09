@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upload Ảnh</title>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #ff6b9d, #ff8e8e, #ffa8a8);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container { max-width: 800px; margin: 0 auto; }
+        .header {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        .header-title {
+            font-family: 'Dancing Script', cursive;
+            font-size: 2.5rem;
+            color: #fff;
+        }
+        .header-actions { display: flex; gap: 15px; }
+        .btn {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.2);
+            color: #fff;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+        .btn:hover { transform: translateY(-2px); }
+        .upload-form {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 40px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .file-upload-area {
+            border: 2px dashed rgba(255, 255, 255, 0.4);
+            border-radius: 15px;
+            padding: 40px;
+            text-align: center;
+            cursor: pointer;
+            position: relative;
+            margin-bottom: 20px;
+        }
+        .file-upload-area:hover { border-color: rgba(255, 255, 255, 0.6); }
+        .file-upload-icon { font-size: 3rem; margin-bottom: 15px; }
+        .file-upload-text { color: rgba(255, 255, 255, 0.9); font-size: 1.1rem; margin-bottom: 10px; }
+        .file-upload-hint { color: rgba(255, 255, 255, 0.6); font-size: 0.9rem; }
+        .file-input {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            cursor: pointer;
+        }
+        .preview-container {
+            margin-top: 20px;
+            display: none;
+        }
+        .preview-image {
+            width: 100%;
+            max-height: 300px;
+            object-fit: cover;
+            border-radius: 15px;
+        }
+        .form-group { margin-bottom: 20px; }
+        .form-label { display: block; color: rgba(255, 255, 255, 0.9); margin-bottom: 8px; }
+        .form-input, .form-select, .form-textarea {
+            width: 100%;
+            padding: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 15px;
+            background: rgba(255, 255, 255, 0.1);
+            color: #fff;
+            font-size: 16px;
+        }
+        .form-input:focus, .form-select:focus, .form-textarea:focus {
+            outline: none;
+            border-color: rgba(255, 255, 255, 0.6);
+            background: rgba(255, 255, 255, 0.2);
+        }
+        .form-textarea { resize: vertical; min-height: 100px; }
+        .submit-btn {
+            width: 100%;
+            padding: 18px;
+            background: linear-gradient(45deg, #ff1744, #ff6b9d);
+            border: none;
+            border-radius: 15px;
+            color: #fff;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+        }
+        .submit-btn:hover { transform: translateY(-3px); }
+        .submit-btn:disabled {
+            background: rgba(255, 255, 255, 0.3);
+            cursor: not-allowed;
+        }
+        .message {
+            padding: 15px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            display: none;
+            text-align: center;
+        }
+        .message.success {
+            background: rgba(0, 255, 0, 0.2);
+            border: 1px solid rgba(0, 255, 0, 0.3);
+            color: #fff;
+        }
+        .message.error {
+            background: rgba(255, 0, 0, 0.2);
+            border: 1px solid rgba(255, 0, 0, 0.3);
+            color: #fff;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1 class="header-title">Upload Ảnh Yêu</h1>
+            <div class="header-actions">
+                <a href="/admin/dashboard" class="btn btn-secondary">Dashboard</a>
+                <a href="/" class="btn btn-secondary">Xem Website</a>
+            </div>
+        </div>
+        <div class="message" id="message"></div>
+        <form class="upload-form" id="uploadForm" enctype="multipart/form-data">
+            <div class="file-upload-area" id="fileUploadArea">
+                <div class="file-upload-icon">📷</div>
+                <div class="file-upload-text">Chọn ảnh hoặc kéo thả vào đây</div>
+                <div class="file-upload-hint">Hỗ trợ: JPG, PNG, GIF, WebP (tối đa 10MB)</div>
+                <input type="file" class="file-input" id="photoFile" name="photo" accept="image/*" required>
+            </div>
+            <div class="preview-container" id="previewContainer">
+                <img class="preview-image" id="previewImage" alt="Preview">
+            </div>
+            <div class="form-group">
+                <label class="form-label" for="title">Tiêu đề ảnh</label>
+                <input type="text" id="title" name="title" class="form-input" placeholder="Nhập tiêu đề (tùy chọn)">
+            </div>
+            <div class="form-group">
+                <label class="form-label" for="category">Danh mục *</label>
+                <select id="category" name="category" class="form-select" required>
+                    <option value="">Chọn danh mục</option>
+                    <option value="couple">Ảnh đôi</option>
+                    <option value="food">Đồ ăn</option>
+                    <option value="travel">Du lịch</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label class="form-label" for="date">Ngày chụp</label>
+                <input type="date" id="date" name="date" class="form-input">
+            </div>
+            <div class="form-group">
+                <label class="form-label" for="description">Mô tả</label>
+                <textarea id="description" name="description" class="form-textarea" placeholder="Nhập mô tả (tùy chọn)"></textarea>
+            </div>
+            <button type="submit" class="submit-btn" id="submitBtn">Upload Ảnh</button>
+        </form>
+    </div>
+    <script>
+        function checkAuth() {
+            const token = localStorage.getItem('adminToken');
+            if (!token) {
+                window.location.href = '/admin';
+                return false;
+            }
+            return token;
+        }
+        function showMessage(text, type = 'success') {
+            const message = document.getElementById('message');
+            message.textContent = text;
+            message.className = `message ${type}`;
+            message.style.display = 'block';
+            setTimeout(() => message.style.display = 'none', 5000);
+        }
+        const fileInput = document.getElementById('photoFile');
+        const previewContainer = document.getElementById('previewContainer');
+        const previewImage = document.getElementById('previewImage');
+        fileInput.addEventListener('change', (e) => {
+            if (e.target.files.length > 0) {
+                const file = e.target.files[0];
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    previewImage.src = e.target.result;
+                    previewContainer.style.display = 'block';
+                };
+                reader.readAsDataURL(file);
+                const dateInput = document.getElementById('date');
+                if (!dateInput.value) {
+                    dateInput.value = new Date().toISOString().split('T')[0];
+                }
+            }
+        });
+        document.getElementById('uploadForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const token = checkAuth();
+            if (!token) return;
+            const formData = new FormData(e.target);
+            const submitBtn = document.getElementById('submitBtn');
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Đang upload...';
+            try {
+                const response = await fetch('/api/admin/upload', {
+                    method: 'POST',
+                    headers: { 'Authorization': `Bearer ${token}` },
+                    body: formData
+                });
+                const data = await response.json();
+                if (response.ok) {
+                    showMessage(data.message);
+                    e.target.reset();
+                    previewContainer.style.display = 'none';
+                    setTimeout(() => window.location.href = '/admin/dashboard', 2000);
+                } else {
+                    showMessage(data.error, 'error');
+                }
+            } catch (error) {
+                showMessage('Lỗi kết nối server', 'error');
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Upload Ảnh';
+            }
+        });
+        checkAuth();
+    </script>
+</body>
+</html>
