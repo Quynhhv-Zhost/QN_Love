@@ -182,15 +182,13 @@ app.post('/api/admin/upload', authenticateToken, upload.single('photo'), (req, r
         }
         return res.status(400).json({ error: 'Danh mục là bắt buộc' });
     }
-
     const normalizedTitle = (title || '').trim();
-    const finalTitle = normalizedTitle || `Ảnh kỷ niệm ${new Date().toLocaleDateString('vi-VN')}`;
     
     const photos = readJsonFile(photosFile);
     const newPhoto = {
         id: Date.now(),
         filename: req.file.filename,
-        title: finalTitle,
+        title: normalizedTitle,
         category,
         description: description || '',
         date: date || new Date().toISOString().split('T')[0],
