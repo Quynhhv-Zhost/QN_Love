@@ -129,6 +129,8 @@ const authenticateToken = (req, res, next) => {
 
 // Routes
 app.get('/api/photos', (req, res) => {
+    const normalizedTitle = (title || '').trim();
+
     const photos = readJsonFile(photosFile);
     res.json(photos);
 });
@@ -173,7 +175,7 @@ app.post('/api/admin/upload', authenticateToken, upload.single('photo'), (req, r
         return res.status(400).json({ error: 'Không có file được upload' });
     }
     
-    const { category, description, date } = req.body;
+    const { title, category, description, date } = req.body;
     
     if (!category) {
         const uploadedFilePath = path.join(uploadsDir, req.file.filename);
@@ -182,11 +184,13 @@ app.post('/api/admin/upload', authenticateToken, upload.single('photo'), (req, r
         }
         return res.status(400).json({ error: 'Danh mục là bắt buộc' });
     }
+    const normalizedTitle = (title || '').trim();
+
     const photos = readJsonFile(photosFile);
     const newPhoto = {
         id: Date.now(),
         filename: req.file.filename,
-        title: '',
+        title: normalizedTitle,
         category,
         description: description || '',
         date: date || new Date().toISOString().split('T')[0],
@@ -201,6 +205,8 @@ app.post('/api/admin/upload', authenticateToken, upload.single('photo'), (req, r
 
 app.delete('/api/admin/photos/:id', authenticateToken, (req, res) => {
     const photoId = parseInt(req.params.id);
+    const normalizedTitle = (title || '').trim();
+
     const photos = readJsonFile(photosFile);
     const photoIndex = photos.findIndex(p => p.id === photoId);
     
@@ -274,6 +280,8 @@ app.put('/api/admin/banner-caption', authenticateToken, (req, res) => {
 });
 
 app.get('/api/admin/dashboard', authenticateToken, (req, res) => {
+    const normalizedTitle = (title || '').trim();
+
     const photos = readJsonFile(photosFile);
     const settings = readJsonFile(settingsFile);
     
