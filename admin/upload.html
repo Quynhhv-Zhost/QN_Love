@@ -224,6 +224,18 @@
             const token = checkAuth();
             if (!token) return;
             const formData = new FormData(e.target);
+            const category = (formData.get('category') || '').trim();
+            if (!category) {
+                showMessage('Vui lòng chọn danh mục ảnh', 'error');
+                return;
+            }
+
+            const title = (formData.get('title') || '').trim();
+            if (!title) {
+                const today = new Date().toLocaleDateString('vi-VN');
+                formData.set('title', `Ảnh kỷ niệm ${today}`);
+            }
+
             const submitBtn = document.getElementById('submitBtn');
             submitBtn.disabled = true;
             submitBtn.textContent = 'Đang upload...';
