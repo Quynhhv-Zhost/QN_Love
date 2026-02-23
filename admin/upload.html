@@ -230,12 +230,6 @@
                 return;
             }
 
-            const title = (formData.get('title') || '').trim();
-            if (!title) {
-                const today = new Date().toLocaleDateString('vi-VN');
-                formData.set('title', `Ảnh kỷ niệm ${today}`);
-            }
-
             const submitBtn = document.getElementById('submitBtn');
             submitBtn.disabled = true;
             submitBtn.textContent = 'Đang upload...';
