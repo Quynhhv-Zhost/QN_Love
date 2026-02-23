@@ -175,15 +175,19 @@ app.post('/api/admin/upload', authenticateToken, upload.single('photo'), (req, r
     
     const { title, category, description, date } = req.body;
     
-    if (!title || !category) {
-        return res.status(400).json({ error: 'Tiêu đề và danh mục là bắt buộc' });
+    if (!category) {
+        const uploadedFilePath = path.join(uploadsDir, req.file.filename);
+        if (fs.existsSync(uploadedFilePath)) {
+            fs.unlinkSync(uploadedFilePath);
+        }
+        return res.status(400).json({ error: 'Danh mục là bắt buộc' });
     }
     
     const photos = readJsonFile(photosFile);
     const newPhoto = {
         id: Date.now(),
         filename: req.file.filename,
-        title,
+        title: (title || '').trim(),
         category,
         description: description || '',
         date: date || new Date().toISOString().split('T')[0],
