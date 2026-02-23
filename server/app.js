@@ -68,6 +68,36 @@ const initializeDataFiles = () => {
 initializeDataFiles();
 
 // Helper functions
+
+const normalizeOptionalPhotoTitle = (rawTitle, photoDate) => {
+    const title = (rawTitle || '').trim();
+    if (!title) {
+        return '';
+    }
+
+    const autoTitleRegex = /^Ảnh kỷ niệm \d{1,2}\/\d{1,2}\/\d{4}$/;
+    if (!autoTitleRegex.test(title)) {
+        return title;
+    }
+
+    const todayLabel = `Ảnh kỷ niệm ${new Date().toLocaleDateString('vi-VN')}`;
+    if (title !== todayLabel) {
+        return title;
+    }
+
+    if (!photoDate) {
+        return '';
+    }
+
+    const selectedDate = new Date(photoDate);
+    if (Number.isNaN(selectedDate.getTime())) {
+        return '';
+    }
+
+    const selectedDateLabel = selectedDate.toLocaleDateString('vi-VN');
+    return selectedDateLabel === new Date().toLocaleDateString('vi-VN') ? title : '';
+};
+
 const readJsonFile = (filePath) => {
     try {
         return JSON.parse(fs.readFileSync(filePath, 'utf8'));
@@ -187,7 +217,7 @@ app.post('/api/admin/upload', authenticateToken, upload.single('photo'), (req, r
     const newPhoto = {
         id: Date.now(),
         filename: req.file.filename,
-        title: (title || '').trim(),
+        title: normalizeOptionalPhotoTitle(title, date),
         category,
         description: description || '',
         date: date || new Date().toISOString().split('T')[0],
