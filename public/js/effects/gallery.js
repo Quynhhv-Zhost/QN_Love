@@ -81,11 +81,13 @@ class GalleryEffects {
     createFilmFrame(photo) {
         const filmFrame = document.createElement('div');
         filmFrame.className = 'film-frame';
+        const safeTitle = (photo.title || '').trim();
+        const infoTitleHtml = safeTitle ? `<div class="film-frame-title">${safeTitle}</div>` : '';
         filmFrame.innerHTML = `
-            <img src="/uploads/${photo.filename}" alt="${photo.title}"
+            <img src="/uploads/${photo.filename}" alt="${safeTitle || 'Ảnh kỷ niệm'}"
                  onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzIwIiBoZWlnaHQ9IjI0MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjZmY2YjlkIi8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIyMCIgZmlsbD0iI2ZmZiIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZHk9Ii4zZW0iPuG9oG5oIOG7nWMgbeG7jW5nPC90ZXh0Pjwvc3ZnPg=='" >
             <div class="film-frame-info">
-                <div class="film-frame-title">${photo.title}</div>
+                ${infoTitleHtml}
                 <div class="film-frame-date">${this.formatDate(photo.date)}</div>
             </div>
         `;
@@ -96,11 +98,13 @@ class GalleryEffects {
     createPhotoElement(photo) {
         const photoDiv = document.createElement('div');
         photoDiv.className = 'photo-item floating-element hover-float';
+        const safeTitle = (photo.title || '').trim();
+        const overlayTitleHtml = safeTitle ? `<div class="photo-title">${safeTitle}</div>` : '';
         photoDiv.innerHTML = `
-            <img src="/uploads/${photo.filename}" alt="${photo.title}" 
+            <img src="/uploads/${photo.filename}" alt="${safeTitle || 'Ảnh kỷ niệm'}" 
                  onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzAwIiBoZWlnaHQ9IjI4MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjZmY2YjlkIi8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIyMCIgZmlsbD0iI2ZmZiIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZHk9Ii4zZW0iPuG9oG5oIOG7nWMgbeG7jW5nPC90ZXh0Pjwvc3ZnPg=='">
             <div class="photo-overlay">
-                <div class="photo-title">${photo.title}</div>
+                ${overlayTitleHtml}
                 <div class="photo-date">${this.formatDate(photo.date)}</div>
             </div>
         `;
@@ -119,7 +123,7 @@ class GalleryEffects {
     
     openModal(photo) {
         this.modalImage.src = `/uploads/${photo.filename}`;
-        this.modalTitle.textContent = photo.title;
+        this.modalTitle.textContent = (photo.title || '').trim();
         this.modalDate.textContent = this.formatDate(photo.date);
         this.modalDescription.textContent = photo.description || '';
         this.modal.style.display = 'block';

@@ -224,6 +224,12 @@
             const token = checkAuth();
             if (!token) return;
             const formData = new FormData(e.target);
+            const category = (formData.get('category') || '').trim();
+            if (!category) {
+                showMessage('Vui lòng chọn danh mục ảnh', 'error');
+                return;
+            }
+
             const submitBtn = document.getElementById('submitBtn');
             submitBtn.disabled = true;
             submitBtn.textContent = 'Đang upload...';
